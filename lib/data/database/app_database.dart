@@ -33,13 +33,19 @@ class AppDatabase extends _$AppDatabase {
 
   Stream<List<TaskTableData>> watchTasks() => select(taskTable).watch();
 
+  Future<void> updateTask(TaskTableData task) =>
+      update(taskTable).replace(task);
+
+  Future<void> deleteTasks(List<int> taskIds) =>
+      (delete(taskTable)..where((tbl) => tbl.id.isIn(taskIds))).go();
+
   Future<void> deleteTasksByTabId(int tabId) =>
       (delete(taskTable)..where((task) => task.tabId.equals(tabId))).go();
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await getApplicationSupportDirectory();
     final file = File(p.join(dir.path, 'db.sqlite'));
     return NativeDatabase.createBackgroundConnection(file);
   });

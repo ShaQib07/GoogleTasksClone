@@ -6,7 +6,9 @@ import '../cubit/task_cubit.dart';
 import '../cubit/task_state.dart';
 
 class NewTaskBody extends StatefulWidget {
-  const NewTaskBody({super.key});
+  const NewTaskBody({super.key, this.tabId});
+
+  final int? tabId;
 
   @override
   State<StatefulWidget> createState() => _NewTaskBodyState();
@@ -21,10 +23,6 @@ class _NewTaskBodyState extends State<NewTaskBody> {
     super.initState();
     _titleController = TextEditingController();
     _descController = TextEditingController();
-
-    _titleController.addListener(
-      () => context.read<TaskCubit>().onTitleChanged(_titleController.text),
-    );
   }
 
   @override
@@ -55,6 +53,7 @@ class _NewTaskBodyState extends State<NewTaskBody> {
                   style: const TextStyle(fontSize: 16),
                   autofocus: true,
                   controller: _titleController,
+                  onChanged: cubit.onTitleChanged,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: AppStrings.newTask,
@@ -69,6 +68,7 @@ class _NewTaskBodyState extends State<NewTaskBody> {
                   child: TextField(
                     style: const TextStyle(fontSize: 14),
                     controller: _descController,
+                    onChanged: cubit.onDescChanged,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: AppStrings.addDetails,
@@ -105,7 +105,7 @@ class _NewTaskBodyState extends State<NewTaskBody> {
                     onPressed: state.title.isEmpty
                         ? null
                         : () {
-                            cubit.createTask();
+                            cubit.createTask(widget.tabId);
                             Navigator.pop(context);
                           },
                     child: const Text(AppStrings.save),

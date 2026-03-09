@@ -22,10 +22,6 @@ class _CreateListBodyState extends State<CreateListBody> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.tab?.tabName ?? '');
-
-    _controller.addListener(
-      () => context.read<CreateListCubit>().onTitleChanged(_controller.text),
-    );
   }
 
   @override
@@ -65,6 +61,7 @@ class _CreateListBodyState extends State<CreateListBody> {
               style: const TextStyle(fontSize: 16),
               autofocus: true,
               controller: _controller,
+              onChanged: cubit.onTitleChanged,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: AppStrings.enterListTitle,

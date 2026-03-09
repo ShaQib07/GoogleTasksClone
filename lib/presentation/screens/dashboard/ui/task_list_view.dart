@@ -14,12 +14,18 @@ class TaskListView extends StatelessWidget {
     required this.tasks,
     required this.onMorePressed,
     required this.onSortPressed,
+    required this.onTaskTap,
+    required this.onTaskChecked,
+    required this.onTaskStarred,
   });
 
   final TaskTabEntity taskTab;
   final List<TaskEntity> tasks;
   final VoidCallback onMorePressed;
   final VoidCallback onSortPressed;
+  final Function(TaskEntity task) onTaskTap;
+  final Function(TaskEntity task, bool value) onTaskChecked;
+  final Function(TaskEntity task, bool value) onTaskStarred;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +60,15 @@ class TaskListView extends StatelessWidget {
                 children: tasks.map((task) {
                   return TaskItem(
                     task: task,
-                    onTap: () {},
-                    onChecked: (value) {},
+                    onTap: () {
+                      onTaskTap(task);
+                    },
+                    onChecked: (value) {
+                      onTaskChecked(task, value ?? false);
+                    },
+                    onStarred: (value) {
+                      onTaskStarred(task, value);
+                    },
                   );
                 }).toList(),
               ),

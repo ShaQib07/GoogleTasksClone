@@ -12,28 +12,26 @@ class TaskRepoImpl extends TaskRepo {
   final AppDatabase _db;
 
   @override
-  Future<void> createTask(TaskEntity task) async {
-    _db.insertTask(task.toCompanion());
+  Future<void> createTask(TaskEntity task) async =>
+      _db.insertTask(task.toCompanion());
+
+  @override
+  Stream<List<TaskEntity>> readTasks() => _db.watchTasks().map(
+    (tasks) => tasks.map((task) => task.toEntity()).toList(),
+  );
+
+  @override
+  Future<void> updateTask(TaskEntity task) async =>
+      _db.updateTask(task.toTableData());
+
+  @override
+  Future<void> deleteTasks(List<TaskEntity> tasks) async {
+    if (tasks.isEmpty) return;
+    final taskIds = tasks.map((task) => task.id ?? 0).toList();
+    _db.deleteTasks(taskIds);
   }
 
   @override
-  Future<void> deleteTab(TaskEntity task) {
-    // TODO: implement deleteTab
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<List<TaskEntity>> readTasks() {
-    return _db.watchTasks().map(
-          (tasks) => tasks
-          .map((task) => task.toEntity())
-          .toList(),
-    );
-  }
-
-  @override
-  Future<void> updateTab(TaskEntity task) {
-    // TODO: implement updateTab
-    throw UnimplementedError();
-  }
+  Future<void> deleteTaskByTabId(int tabId) async =>
+      _db.deleteTasksByTabId(tabId);
 }

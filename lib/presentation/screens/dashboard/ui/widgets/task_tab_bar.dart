@@ -6,10 +6,12 @@ import '../../../../../resources/app_strings.dart';
 class TaskTabBar extends StatelessWidget {
   const TaskTabBar({
     super.key,
+    required this.controller,
     required this.tabs,
     required this.onCreateNewList,
   });
 
+  final TabController controller;
   final List<TaskTabEntity> tabs;
   final VoidCallback onCreateNewList;
 
@@ -26,6 +28,7 @@ class TaskTabBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TabBar(
+                  controller: controller,
                   isScrollable: true,
                   tabAlignment: TabAlignment.start,
                   padding: const EdgeInsets.symmetric(horizontal: 8),

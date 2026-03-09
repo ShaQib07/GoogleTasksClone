@@ -6,13 +6,15 @@ import 'package:google_tasks_clone/presentation/screens/task/ui/new_task_body.da
 import '../../../di/injection.dart';
 
 class NewTaskSheet extends StatelessWidget {
-  const NewTaskSheet({super.key});
+  const NewTaskSheet({super.key, this.tabId});
+
+  final int? tabId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TaskCubit>(
       create: (_) => injector(),
-      child: const NewTaskBody(),
+      child: NewTaskBody(tabId: tabId),
     );
   }
 }

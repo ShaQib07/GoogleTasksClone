@@ -12,10 +12,16 @@ class StarredListView extends StatelessWidget {
     super.key,
     required this.tasks,
     required this.onSortPressed,
+    required this.onTaskTap,
+    required this.onTaskChecked,
+    required this.onTaskStarred,
   });
 
   final List<TaskEntity> tasks;
   final VoidCallback onSortPressed;
+  final Function(TaskEntity task) onTaskTap;
+  final Function(TaskEntity task, bool value) onTaskChecked;
+  final Function(TaskEntity task, bool value) onTaskStarred;
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +78,15 @@ class StarredListView extends StatelessWidget {
               children: tasks.map((task) {
                 return TaskItem(
                   task: task,
-                  onTap: () {},
-                  onChecked: (value) {},
+                  onTap: () {
+                    onTaskTap(task);
+                  },
+                  onChecked: (value) {
+                    onTaskChecked(task, value ?? false);
+                  },
+                  onStarred: (value) {
+                    onTaskStarred(task, value);
+                  },
                 );
               }).toList(),
             ),

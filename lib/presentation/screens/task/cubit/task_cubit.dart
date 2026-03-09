@@ -12,14 +12,16 @@ class TaskCubit extends Cubit<TaskState> {
 
   void onTitleChanged(String value) => emit(state.copyWith(title: value));
 
+  void onDescChanged(String value) => emit(state.copyWith(description: value));
+
   void enableDescription() => emit(state.copyWith(isDescriptionEnabled: true));
 
   void toggleFavorite() => emit(state.copyWith(isFavorite: !state.isFavorite));
 
-  Future<void> createTask() async {
+  Future<void> createTask(int? tabId) async {
     await _createTaskUsecase.run(
       TaskEntity(
-        tabId: 1,
+        tabId: tabId ?? 0,
         title: state.title,
         description: state.description,
         deadline: state.deadline,

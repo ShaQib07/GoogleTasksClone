@@ -15,11 +15,25 @@ extension TaskEntityMapper on TaskEntity {
       isCompleted: Value(isCompleted),
     );
   }
+
+  TaskTableData toTableData() {
+    return TaskTableData(
+      id: id ?? 0,
+      tabId: tabId,
+      title: title,
+      description: description,
+      deadline: deadline,
+      reminder: reminder,
+      isFavorite: isFavorite,
+      isCompleted: isCompleted,
+    );
+  }
 }
 
 extension TaskTableDataMapper on TaskTableData {
   TaskEntity toEntity() {
     return TaskEntity(
+      id: id,
       tabId: tabId,
       title: title,
       description: description,

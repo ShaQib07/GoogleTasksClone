@@ -6,54 +6,101 @@ import 'package:google_tasks_clone/presentation/screens/dashboard/cubit/dashboar
 import 'package:google_tasks_clone/presentation/screens/dashboard/ui/starred_list_view.dart';
 import 'package:google_tasks_clone/presentation/screens/dashboard/ui/task_list_view.dart';
 import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/list_action_sheet.dart';
+import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/sort_action_sheet.dart';
 import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/task_tab_bar.dart';
 import 'package:google_tasks_clone/presentation/screens/task/new_task_sheet.dart';
 import 'package:google_tasks_clone/resources/app_strings.dart';
 
+import '../../../../domain/entities/task_entity.dart';
 import '../../../../routes/router.gr.dart';
 
-class DashboardBody extends StatelessWidget {
+class DashboardBody extends StatefulWidget {
   const DashboardBody({super.key});
 
-  void _openNewTaskSheet(BuildContext context) {
+  @override
+  State<StatefulWidget> createState() => _DashboardBodyState();
+}
+
+class _DashboardBodyState extends State<DashboardBody>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  int _tabLength = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final cubit = context.read<DashboardCubit>();
+    _tabLength = cubit.state.tabList.length + 1;
+
+    _initController(cubit);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _initController(DashboardCubit cubit) {
+    _tabController = TabController(length: _tabLength, vsync: this);
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) return;
+
+      cubit.onTabChanged(_tabController.index);
+    });
+  }
+
+  void _openNewTaskSheet(BuildContext context, int? tabId) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => const NewTaskSheet(),
+      builder: (_) => NewTaskSheet(tabId: tabId),
     );
   }
 
   Future<ListAction?> _openListActionSheet(
     BuildContext context,
     bool hasCompletedTasks,
-  ) {
-    return showModalBottomSheet<ListAction>(
-      context: context,
-      useSafeArea: true,
-      builder: (_) => ListActionSheet(hasCompletedTasks: hasCompletedTasks),
-    );
-  }
+  ) => showModalBottomSheet<ListAction>(
+    context: context,
+    useSafeArea: true,
+    builder: (_) => ListActionSheet(hasCompletedTasks: hasCompletedTasks),
+  );
 
-  void _openSortOptionSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (_) => const NewTaskSheet(),
-    );
-  }
+  Future<SortAction?> _openSortOptionSheet(
+    BuildContext context,
+    SortAction sortAction,
+  ) => showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (_) => SortActionSheet(currentSelection: sortAction),
+  );
 
   @override
   Widget build(BuildContext context) {
     final router = context.router;
     final cubit = context.read<DashboardCubit>();
 
-    return BlocBuilder<DashboardCubit, DashboardState>(
-      builder: (context, state) {
-        return DefaultTabController(
-          length: state.tabList.length + 1,
-          child: Scaffold(
+    return BlocListener<DashboardCubit, DashboardState>(
+      listener: (context, state) {
+        final newLength = state.tabList.length + 1;
+
+        if (newLength != _tabLength) {
+          _tabLength = newLength;
+
+          _tabController.dispose();
+          _initController(context.read<DashboardCubit>());
+        }
+
+        _tabController.animateTo(state.selectedTab);
+      },
+      child: BlocBuilder<DashboardCubit, DashboardState>(
+        builder: (context, state) {
+          return Scaffold(
             appBar: AppBar(
               title: const Text(
                 AppStrings.tasks,
@@ -63,16 +110,30 @@ class DashboardBody extends StatelessWidget {
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(48),
                 child: TaskTabBar(
+                  controller: _tabController,
                   tabs: cubit.state.tabList,
                   onCreateNewList: () => router.push(CreateListRoute()),
                 ),
               ),
             ),
             body: TabBarView(
+              controller: _tabController,
               children: [
                 StarredListView(
                   tasks: cubit.getStarredTasks(),
-                  onSortPressed: () => _openSortOptionSheet(context),
+                  onSortPressed: () async {
+                    final action = await _openSortOptionSheet(
+                      context,
+                      state.sortAction,
+                    );
+
+                    if (action == null) return;
+
+                    cubit.onSortChanged(action);
+                  },
+                  onTaskTap: (TaskEntity task) {},
+                  onTaskChecked: cubit.onTaskChecked,
+                  onTaskStarred: cubit.onTaskStarred,
                 ),
 
                 for (var tab in state.tabList)
@@ -80,7 +141,10 @@ class DashboardBody extends StatelessWidget {
                     taskTab: tab,
                     tasks: cubit.getTasksForTab(tab.id),
                     onMorePressed: () async {
-                      final action = await _openListActionSheet(context, false);
+                      final action = await _openListActionSheet(
+                        context,
+                        cubit.getCompletedTasksForTab(tab.id).isNotEmpty,
+                      );
 
                       if (action == null) return;
 
@@ -90,20 +154,33 @@ class DashboardBody extends StatelessWidget {
                         case ListAction.delete:
                           cubit.deleteTab(tab.id);
                         case ListAction.deleteCompleted:
-                        //cubit.deleteCompletedTasks();
+                          cubit.deleteCompletedTasks(tab.id);
                       }
                     },
-                    onSortPressed: () => _openSortOptionSheet(context),
+                    onSortPressed: () async {
+                      final action = await _openSortOptionSheet(
+                        context,
+                        state.sortAction,
+                      );
+
+                      if (action == null) return;
+
+                      cubit.onSortChanged(action);
+                    },
+                    onTaskTap: (TaskEntity task) {},
+                    onTaskChecked: cubit.onTaskChecked,
+                    onTaskStarred: cubit.onTaskStarred,
                   ),
               ],
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () => _openNewTaskSheet(context),
+              onPressed: () =>
+                  _openNewTaskSheet(context, cubit.getCurrentTab().id),
               child: Icon(Icons.add),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -20,6 +20,30 @@ class TaskEntity {
     this.reminder,
     required this.isFavorite,
     required this.isCompleted,
-    this.subtasks
+    this.subtasks,
   });
+
+  TaskEntity copyWith({
+    int? id,
+    int? tabId,
+    String? title,
+    String? description,
+    String? deadline,
+    String? reminder,
+    bool? isFavorite,
+    bool? isCompleted,
+    List<SubTaskEntity>? subtasks,
+  }) {
+    return TaskEntity(
+      id: id ?? this.id,
+      tabId: tabId ?? this.tabId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      deadline: deadline ?? this.deadline,
+      reminder: reminder ?? this.reminder,
+      isFavorite: isFavorite ?? this.isFavorite,
+      isCompleted: isCompleted ?? this.isCompleted,
+      subtasks: subtasks ?? this.subtasks,
+    );
+  }
 }

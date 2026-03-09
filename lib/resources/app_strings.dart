@@ -23,5 +23,10 @@ class AppStrings {
   static const String renameList = 'Rename list';
   static const String deleteList = 'Delete list';
   static const String deleteCompletedTasks = 'Delete all completed tasks';
-
+  static const String sortBy = 'Sort by';
+  static const String myOrder = 'My order';
+  static const String date = 'Date';
+  static const String deadline = 'Deadline';
+  static const String starredRecently = 'Starred recently';
+  static const String title = 'Title';
 }

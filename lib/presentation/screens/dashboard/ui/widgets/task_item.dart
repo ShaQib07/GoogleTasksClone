@@ -5,12 +5,14 @@ class TaskItem extends StatelessWidget {
   final TaskEntity task;
   final VoidCallback onTap;
   final ValueChanged<bool?> onChecked;
+  final ValueChanged<bool> onStarred;
 
   const TaskItem({
     super.key,
     required this.task,
     required this.onTap,
     required this.onChecked,
+    required this.onStarred,
   });
 
   @override
@@ -48,7 +50,7 @@ class TaskItem extends StatelessWidget {
                 ),
 
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => onStarred(!task.isFavorite),
                   icon: task.isFavorite
                       ? const Icon(Icons.star)
                       : const Icon(Icons.star_border),
