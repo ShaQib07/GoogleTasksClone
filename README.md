@@ -4,6 +4,8 @@ A clean and functional clone of the Google Tasks mobile application, built with 
 
 ## 📺 Demo
 
+## 📱 App Demo
+
 ![Watch Demo](assets/Google-Tasks-Clone-Demo.mp4)
 
 ## 🚀 Features
