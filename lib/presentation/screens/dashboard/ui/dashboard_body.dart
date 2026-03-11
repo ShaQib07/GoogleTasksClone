@@ -5,8 +5,8 @@ import 'package:google_tasks_clone/presentation/screens/dashboard/cubit/dashboar
 import 'package:google_tasks_clone/presentation/screens/dashboard/cubit/dashboard_state.dart';
 import 'package:google_tasks_clone/presentation/screens/dashboard/ui/starred_list_view.dart';
 import 'package:google_tasks_clone/presentation/screens/dashboard/ui/task_list_view.dart';
-import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/list_action_sheet.dart';
-import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/sort_action_sheet.dart';
+import 'package:google_tasks_clone/presentation/screens/dashboard/ui/list_action_sheet.dart';
+import 'package:google_tasks_clone/presentation/screens/dashboard/ui/sort_action_sheet.dart';
 import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/task_tab_bar.dart';
 import 'package:google_tasks_clone/presentation/screens/task/new_task_sheet.dart';
 import 'package:google_tasks_clone/resources/app_strings.dart';

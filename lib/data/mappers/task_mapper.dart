@@ -9,10 +9,12 @@ extension TaskEntityMapper on TaskEntity {
       tabId: tabId,
       title: title,
       description: Value(description),
+      dateAndTime: Value(dateTime),
       deadline: Value(deadline),
       reminder: Value(reminder),
       isFavorite: Value(isFavorite),
       isCompleted: Value(isCompleted),
+      createdAt: createdAt,
     );
   }
 
@@ -22,10 +24,12 @@ extension TaskEntityMapper on TaskEntity {
       tabId: tabId,
       title: title,
       description: description,
+      dateAndTime: dateTime,
       deadline: deadline,
       reminder: reminder,
       isFavorite: isFavorite,
       isCompleted: isCompleted,
+      createdAt: createdAt,
     );
   }
 }
@@ -37,10 +41,12 @@ extension TaskTableDataMapper on TaskTableData {
       tabId: tabId,
       title: title,
       description: description,
+      dateTime: dateAndTime,
       deadline: deadline,
       reminder: reminder,
       isFavorite: isFavorite,
       isCompleted: isCompleted,
+      createdAt: createdAt,
     );
   }
 }

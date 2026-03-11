@@ -10,13 +10,25 @@ abstract class TaskState with _$TaskState {
     required String title,
     required String? description,
     required bool isDescriptionEnabled,
-    required String? deadline,
+    required DateTime? dateTime,
+    required DateTime? deadline,
     required String? reminder,
     required bool isFavorite,
     required bool isCompleted,
+    required DateTime createdAt,
   }) = _TaskState;
 
   factory TaskState.initial() {
-    return TaskState(title: '', description: '', isDescriptionEnabled: false, deadline: '', reminder: '', isFavorite: false, isCompleted: false);
+    return TaskState(
+      title: '',
+      description: '',
+      isDescriptionEnabled: false,
+      dateTime: null,
+      deadline: null,
+      reminder: '',
+      isFavorite: false,
+      isCompleted: false,
+      createdAt: DateTime.now(),
+    );
   }
 }

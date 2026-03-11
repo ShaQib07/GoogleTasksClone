@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_tasks_clone/domain/entities/task_entity.dart';
 import 'package:google_tasks_clone/domain/entities/task_tab_entity.dart';
-import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/sort_action_sheet.dart';
+import 'package:google_tasks_clone/presentation/screens/dashboard/ui/sort_action_sheet.dart';
 
 part 'dashboard_state.freezed.dart';
 

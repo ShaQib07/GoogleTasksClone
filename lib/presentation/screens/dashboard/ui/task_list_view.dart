@@ -60,15 +60,9 @@ class TaskListView extends StatelessWidget {
                 children: tasks.map((task) {
                   return TaskItem(
                     task: task,
-                    onTap: () {
-                      onTaskTap(task);
-                    },
-                    onChecked: (value) {
-                      onTaskChecked(task, value ?? false);
-                    },
-                    onStarred: (value) {
-                      onTaskStarred(task, value);
-                    },
+                    onTap: () => onTaskTap(task),
+                    onChecked: (value) => onTaskChecked(task, value ?? false),
+                    onStarred: (value) => onTaskStarred(task, value),
                   );
                 }).toList(),
               ),

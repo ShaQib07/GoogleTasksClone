@@ -29,4 +29,8 @@ class AppStrings {
   static const String deadline = 'Deadline';
   static const String starredRecently = 'Starred recently';
   static const String title = 'Title';
+  static const String setTime = 'Set time';
+  static const String repeat = 'Repeat';
+  static const String youWontBeNotified = 'You won\'t be notified on this device because notifications are turned off.';
+  static const String cancel = 'Cancel';
 }

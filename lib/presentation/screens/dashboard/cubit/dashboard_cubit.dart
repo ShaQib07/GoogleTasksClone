@@ -11,7 +11,7 @@ import 'package:injectable/injectable.dart';
 import '../../../../domain/usecases/tabs/delete_tab_usecase.dart';
 import '../../../../domain/usecases/tabs/read_tab_usecase.dart';
 import '../../../../domain/usecases/tasks/update_task_usecase.dart';
-import '../ui/widgets/sort_action_sheet.dart';
+import '../ui/sort_action_sheet.dart';
 
 @Injectable()
 class DashboardCubit extends Cubit<DashboardState> {

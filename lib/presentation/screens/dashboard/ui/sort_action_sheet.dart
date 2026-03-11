@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../resources/app_strings.dart';
+import '../../../../resources/app_strings.dart';
 
 enum SortAction { myOrder, date, deadline, starredRecently, title }
 

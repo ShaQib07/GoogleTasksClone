@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_tasks_clone/domain/entities/task_entity.dart';
+import 'package:google_tasks_clone/presentation/screens/dashboard/ui/widgets/task_description.dart';
 
 class TaskItem extends StatelessWidget {
   final TaskEntity task;
@@ -17,68 +18,37 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Checkbox(
-                  shape: const CircleBorder(),
-                  value: task.isCompleted,
-                  onChanged: onChecked,
-                ),
-
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        task.title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          decoration: task.isCompleted
-                              ? TextDecoration.lineThrough
-                              : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                IconButton(
-                  onPressed: () => onStarred(!task.isFavorite),
-                  icon: task.isFavorite
-                      ? const Icon(Icons.star)
-                      : const Icon(Icons.star_border),
-                ),
-              ],
-            ),
-
-            if (task.description != null && task.description!.isNotEmpty)
-              Transform.translate(
-                offset: const Offset(0, -8),
-                child: Container(
-                  padding: const EdgeInsets.only(
-                    left: 48,
-                    right: 48,
-                    top: 0,
-                    bottom: 4,
-                  ),
-                  child: Text(
-                    task.description!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                ),
-              ),
-          ],
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+      horizontalTitleGap: 4,
+      titleAlignment: ListTileTitleAlignment.top,
+      leading: Transform.scale(
+        scale: 1.2,
+        child: Checkbox(
+          shape: const CircleBorder(),
+          value: task.isCompleted,
+          onChanged: onChecked,
         ),
       ),
+
+      title: Text(
+        task.title,
+        style: TextStyle(
+          fontSize: 16,
+          decoration: task.isCompleted ? TextDecoration.lineThrough : null,
+        ),
+      ),
+
+      subtitle: TaskDescription(task: task),
+
+      trailing: IconButton(
+        onPressed: () => onStarred(!task.isFavorite),
+        icon: task.isFavorite
+            ? const Icon(Icons.star)
+            : const Icon(Icons.star_border),
+      ),
+
+      onTap: onTap,
     );
   }
 }

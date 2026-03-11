@@ -18,16 +18,22 @@ class TaskCubit extends Cubit<TaskState> {
 
   void toggleFavorite() => emit(state.copyWith(isFavorite: !state.isFavorite));
 
+  void onDateTimeChanged(DateTime value) => emit(state.copyWith(dateTime: value));
+
+  void onDismissDateTime() => emit(state.copyWith(dateTime: null));
+
   Future<void> createTask(int? tabId) async {
     await _createTaskUsecase.run(
       TaskEntity(
         tabId: tabId ?? 0,
         title: state.title,
         description: state.description,
+        dateTime: state.dateTime,
         deadline: state.deadline,
         reminder: state.reminder,
         isFavorite: state.isFavorite,
         isCompleted: false,
+        createdAt: DateTime.now(),
       ),
     );
   }
