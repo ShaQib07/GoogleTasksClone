@@ -2,6 +2,10 @@
 
 A clean and functional clone of the Google Tasks mobile application, built with Flutter. This project demonstrates modern Flutter development practices, including Clean Architecture, BLoC for state management, and a local reactive database with Drift.
 
+## 📺 Demo
+
+![Watch Demo](assets/Google-Tasks-Clone-Demo.mp4)
+
 ## 🚀 Features
 
 - **Task Management**: Create, view, and organize your tasks.
