@@ -9,5 +9,11 @@ class DeleteTaskUsecase {
 
   DeleteTaskUsecase(this._taskRepo);
 
-  Future<void> run(List<TaskEntity> task) => _taskRepo.deleteTasks(task);
+  Future<void> run(List<TaskEntity> tasks) async {
+    for (final task in tasks) {
+      await _taskRepo.deleteTaskByParentTaskId(task.id!);
+    }
+
+    await _taskRepo.deleteTasks(tasks);
+  }
 }

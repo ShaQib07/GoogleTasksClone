@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_tasks_clone/di/injection.dart';
-import 'package:google_tasks_clone/resources/app_strings.dart';
-import 'package:google_tasks_clone/resources/app_theme.dart';
-import 'package:google_tasks_clone/routes/router.dart';
+import 'package:google_tasks_clone/presentation/core/resources/app_strings.dart';
+import 'package:google_tasks_clone/presentation/core/resources/app_theme.dart';
+import 'package:google_tasks_clone/presentation/core/routes/router.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

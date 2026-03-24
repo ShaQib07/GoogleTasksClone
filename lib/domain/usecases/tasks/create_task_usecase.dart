@@ -9,5 +9,5 @@ class CreateTaskUsecase {
 
   CreateTaskUsecase(this._taskRepo);
 
-  Future<void> run(TaskEntity task) => _taskRepo.createTask(task);
+  Future<void> run(List<TaskEntity> taskList) => _taskRepo.createTasks(taskList);
 }

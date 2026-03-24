@@ -1,57 +1,64 @@
-import 'package:google_tasks_clone/domain/entities/sub_task_entity.dart';
-
 class TaskEntity {
   final int? id;
-  final int tabId;
+  final int taskGroupId;
+  final int? parentTaskId;
   final String title;
   final String? description;
   final DateTime? dateTime;
   final DateTime? deadline;
-  final String? reminder;
   final bool isFavorite;
   final bool isCompleted;
   final DateTime createdAt;
-  final List<SubTaskEntity>? subtasks;
+  final bool isSubtask;
+  final List<TaskEntity> subtasks;
 
   const TaskEntity({
     this.id,
-    required this.tabId,
+    required this.taskGroupId,
+    this.parentTaskId,
     required this.title,
     this.description,
     this.dateTime,
     this.deadline,
-    this.reminder,
-    required this.isFavorite,
-    required this.isCompleted,
+    this.isFavorite = false,
+    this.isCompleted = false,
     required this.createdAt,
-    this.subtasks,
+    this.isSubtask = false,
+    this.subtasks = const [],
   });
 
   TaskEntity copyWith({
     int? id,
-    int? tabId,
+    int? taskGroupId,
+    int? parentTaskId,
     String? title,
     String? description,
-    DateTime? dateTime,
-    DateTime? deadline,
-    String? reminder,
+    (bool, DateTime?) dateTime = (false, null),
+    (bool, DateTime?) deadline = (false, null),
     bool? isFavorite,
     bool? isCompleted,
     DateTime? createdAt,
-    List<SubTaskEntity>? subtasks,
+    bool? isSubtask,
+    List<TaskEntity>? subtasks,
   }) {
     return TaskEntity(
       id: id ?? this.id,
-      tabId: tabId ?? this.tabId,
+      taskGroupId: taskGroupId ?? this.taskGroupId,
+      parentTaskId: parentTaskId ?? this.parentTaskId,
       title: title ?? this.title,
       description: description ?? this.description,
-      dateTime: dateTime ?? this.dateTime,
-      deadline: deadline ?? this.deadline,
-      reminder: reminder ?? this.reminder,
+      dateTime: dateTime.$1 ? dateTime.$2 : this.dateTime,
+      deadline: deadline.$1 ? deadline.$2 : this.deadline,
       isFavorite: isFavorite ?? this.isFavorite,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
+      isSubtask: isSubtask ?? this.isSubtask,
       subtasks: subtasks ?? this.subtasks,
     );
+  }
+
+  @override
+  String toString() {
+    return 'TaskEntity(id: $id, taskGroupId: $taskGroupId, parentTaskId: $parentTaskId, title: $title, description: $description, dateTime: $dateTime, deadline: $deadline, isFavorite: $isFavorite, isCompleted: $isCompleted, createdAt: $createdAt, isSubtask: $isSubtask, subtasks: $subtasks)';
   }
 }

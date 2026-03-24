@@ -1,4 +1,4 @@
-import '../routes/router.dart';
+import '../presentation/core/routes/router.dart';
 import 'injection.dart';
 
 class DependencyManager {
