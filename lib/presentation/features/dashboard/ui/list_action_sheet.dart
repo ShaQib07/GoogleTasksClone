@@ -5,8 +5,13 @@ import '../../../../presentation/core/resources/app_strings.dart';
 enum ListAction { rename, delete, deleteCompleted }
 
 class ListActionSheet extends StatelessWidget {
-  const ListActionSheet({super.key, required this.hasCompletedTasks});
+  const ListActionSheet({
+    super.key,
+    required this.isDeletable,
+    required this.hasCompletedTasks,
+  });
 
+  final bool isDeletable;
   final bool hasCompletedTasks;
 
   @override
@@ -21,7 +26,9 @@ class ListActionSheet extends StatelessWidget {
             onTap: () => Navigator.pop(context, ListAction.rename),
           ),
           ListTile(
+            enabled: isDeletable,
             title: const Text(AppStrings.deleteList),
+            subtitle: isDeletable ? null : const Text(AppStrings.cannotDelete),
             onTap: () => Navigator.pop(context, ListAction.delete),
           ),
           ListTile(

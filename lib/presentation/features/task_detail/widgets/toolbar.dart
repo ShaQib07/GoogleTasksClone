@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_tasks_clone/presentation/core/resources/app_strings.dart';
 
 import '../../../core/widgets/icon_star.dart';
 
@@ -8,11 +9,13 @@ class Toolbar extends StatelessWidget {
     required this.isStarred,
     required this.onBack,
     required this.onStarToggle,
+    required this.onDelete,
   });
 
   final bool isStarred;
   final VoidCallback onBack;
   final VoidCallback onStarToggle;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,18 @@ class Toolbar extends StatelessWidget {
 
           IconStar(isStarred: isStarred, onStarToggle: onStarToggle),
 
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+          PopupMenuButton<String>(
+            onSelected: (_) => onDelete(),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: AppStrings.delete,
+                child: SizedBox(
+                  width: 140,
+                  child: const Text(AppStrings.delete),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

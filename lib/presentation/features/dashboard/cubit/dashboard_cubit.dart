@@ -6,6 +6,7 @@ import 'package:google_tasks_clone/domain/entities/task_group_entity.dart';
 import 'package:google_tasks_clone/domain/usecases/task_groups/delete_task_group_usecase.dart';
 import 'package:google_tasks_clone/domain/usecases/task_groups/read_task_group_usecase.dart';
 import 'package:google_tasks_clone/domain/usecases/tasks/delete_task_usecase.dart';
+import 'package:google_tasks_clone/domain/usecases/tasks/get_starred_task_usecase.dart';
 import 'package:google_tasks_clone/domain/usecases/tasks/read_task_usecase.dart';
 import 'package:google_tasks_clone/presentation/features/dashboard/cubit/dashboard_state.dart';
 import 'package:injectable/injectable.dart';
@@ -19,6 +20,7 @@ class DashboardCubit extends Cubit<DashboardState> {
     this._readTaskGroupUsecase,
     this._deleteTaskGroupUsecase,
     this._readTaskUsecase,
+    this._getStarredTaskUsecase,
     this._updateTaskUsecase,
     this._deleteTaskUsecase,
   ) : super(DashboardState.initial()) {
@@ -29,11 +31,13 @@ class DashboardCubit extends Cubit<DashboardState> {
   final ReadTaskGroupUsecase _readTaskGroupUsecase;
   final DeleteTaskGroupUsecase _deleteTaskGroupUsecase;
   final ReadTaskUsecase _readTaskUsecase;
+  final GetStarredTaskUsecase _getStarredTaskUsecase;
   final UpdateTaskUsecase _updateTaskUsecase;
   final DeleteTaskUsecase _deleteTaskUsecase;
 
   StreamSubscription? _tabSubscription;
   StreamSubscription? _taskSubscription;
+  StreamSubscription? _starredTaskSubscription;
 
   void _listenTaskGroups() {
     _tabSubscription = _readTaskGroupUsecase.run().listen((tabs) {
@@ -59,10 +63,11 @@ class DashboardCubit extends Cubit<DashboardState> {
     _taskSubscription = _readTaskUsecase.run().listen((tasks) {
       emit(state.copyWith(taskList: tasks));
     });
-  }
 
-  List<TaskEntity> getStarredTasks() =>
-      state.taskList.where((t) => t.isFavorite).toList();
+    _starredTaskSubscription = _getStarredTaskUsecase.run().listen((tasks) {
+      emit(state.copyWith(starredList: tasks));
+    });
+  }
 
   Future<void> _updateTask(TaskEntity task) async =>
       await _updateTaskUsecase.run(task);
@@ -83,6 +88,7 @@ class DashboardCubit extends Cubit<DashboardState> {
   Future<void> close() {
     _tabSubscription?.cancel();
     _taskSubscription?.cancel();
+    _starredTaskSubscription?.cancel();
     return super.close();
   }
 }

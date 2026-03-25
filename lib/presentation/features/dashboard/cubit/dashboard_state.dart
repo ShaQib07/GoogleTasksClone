@@ -13,6 +13,7 @@ abstract class DashboardState with _$DashboardState {
     required List<TaskGroupEntity> tabList,
     required int selectedTab,
     required List<TaskEntity> taskList,
+    required List<TaskEntity> starredList,
     required SortAction sortAction,
   }) = _DashboardState;
 
@@ -21,6 +22,7 @@ abstract class DashboardState with _$DashboardState {
       tabList: [],
       selectedTab: 0,
       taskList: [],
+      starredList: [],
       sortAction: SortAction.myOrder,
     );
   }

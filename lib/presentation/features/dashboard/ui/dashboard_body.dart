@@ -62,11 +62,15 @@ class _DashboardBodyState extends State<DashboardBody>
 
   Future<ListAction?> _openListActionSheet(
     BuildContext context,
+    bool isDeletable,
     bool hasCompletedTasks,
   ) => showModalBottomSheet<ListAction>(
     context: context,
     useSafeArea: true,
-    builder: (_) => ListActionSheet(hasCompletedTasks: hasCompletedTasks),
+    builder: (_) => ListActionSheet(
+      isDeletable: isDeletable,
+      hasCompletedTasks: hasCompletedTasks,
+    ),
   );
 
   Future<SortAction?> _openSortOptionSheet(
@@ -119,7 +123,7 @@ class _DashboardBodyState extends State<DashboardBody>
               controller: _tabController,
               children: [
                 StarredListView(
-                  tasks: cubit.getStarredTasks(),
+                  tasks: state.starredList,
                   onSortPressed: () async {
                     final action = await _openSortOptionSheet(
                       context,
@@ -149,6 +153,7 @@ class _DashboardBodyState extends State<DashboardBody>
                     onMorePressed: () async {
                       final action = await _openListActionSheet(
                         context,
+                        tab.id != 1,
                         cubit.getCompletedTasksForTab(tab.id).isNotEmpty,
                       );
 

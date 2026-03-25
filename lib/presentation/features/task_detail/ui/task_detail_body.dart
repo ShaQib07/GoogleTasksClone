@@ -110,6 +110,10 @@ class _TaskDetailBodyState extends State<TaskDetailBody> {
                             isStarred: state.isFavorite,
                             onBack: router.pop,
                             onStarToggle: cubit.onToggleFavorite,
+                            onDelete: () {
+                              cubit.deleteTask(state);
+                              router.pop();
+                            },
                           ),
 
                           Expanded(

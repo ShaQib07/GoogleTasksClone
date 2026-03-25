@@ -22,6 +22,7 @@ class AppStrings {
   static const String done = 'Done';
   static const String renameList = 'Rename list';
   static const String deleteList = 'Delete list';
+  static const String cannotDelete = 'Default list can\'t be deleted';
   static const String deleteCompletedTasks = 'Delete all completed tasks';
   static const String sortBy = 'Sort by';
   static const String myOrder = 'My order';
@@ -40,4 +41,5 @@ class AppStrings {
   static const String moveTaskTo = 'Move task to';
   static const String markCompleted = 'Mark completed';
   static const String markUncompleted = 'Mark uncompleted';
+  static const String delete = 'Delete';
 }

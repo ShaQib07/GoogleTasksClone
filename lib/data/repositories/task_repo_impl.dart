@@ -16,25 +16,8 @@ class TaskRepoImpl extends TaskRepo {
       _db.insertTasks(taskList.map((task) => task.toCompanion()).toList());
 
   @override
-  Stream<List<TaskEntity>> readTasks() {
-    return _db.watchTasks().map((rows) {
-      final tasks = rows.map((t) => t.toEntity()).toList();
-
-      final subtasksByParent = <int, List<TaskEntity>>{};
-
-      // mapping subtasks to their parent tasks
-      for (final task in tasks) {
-        if (task.parentTaskId != null) {
-          subtasksByParent.putIfAbsent(task.parentTaskId!, () => []).add(task);
-        }
-      }
-
-      return tasks
-          .where((t) => !t.isSubtask)
-          .map((t) => t.copyWith(subtasks: subtasksByParent[t.id] ?? []))
-          .toList();
-    });
-  }
+  Stream<List<TaskEntity>> readTasks() =>
+      _db.watchTasks().map((rows) => rows.map((t) => t.toEntity()).toList());
 
   @override
   Stream<TaskEntity> readTaskById(int id) {
