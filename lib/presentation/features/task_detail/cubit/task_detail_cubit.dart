@@ -19,7 +19,8 @@ class TaskDetailCubit extends Cubit<TaskEntity> {
   void onToggleFavorite() =>
       emit(state.copyWith(isFavorite: !state.isFavorite));
 
-  void onTaskGroupChanged(int id) => emit(state.copyWith(taskGroupId: id));
+  void onTaskGroupChanged(int id) =>
+      emit(state.copyWith(taskGroupId: id, isSubtask: false));
 
   void onTitleChanged(String value) => emit(state.copyWith(title: value));
 

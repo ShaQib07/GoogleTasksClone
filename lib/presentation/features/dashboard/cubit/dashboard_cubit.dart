@@ -45,8 +45,10 @@ class DashboardCubit extends Cubit<DashboardState> {
     });
   }
 
-  List<TaskEntity> getTasksForTab(int? tabId) =>
-      state.taskList.where((t) => t.taskGroupId == tabId).toList();
+  List<TaskEntity> getTasksForTab(int? tabId) {
+    final tasks = state.taskList.where((t) => t.taskGroupId == tabId).toList();
+    return _getSortedTasks(tasks);
+  }
 
   List<TaskEntity> getCompletedTasksForTab(int? tabId) => state.taskList
       .where((t) => t.taskGroupId == tabId && t.isCompleted)
@@ -81,8 +83,56 @@ class DashboardCubit extends Cubit<DashboardState> {
   void onTaskStarToggle(TaskEntity task) =>
       _updateTask(task.copyWith(isFavorite: !task.isFavorite));
 
-  void onSortChanged(SortAction action) =>
-      emit(state.copyWith(sortAction: action));
+  void onSortChanged(SortAction action) {
+    emit(state.copyWith(sortAction: action));
+    emit(state.copyWith(taskList: _getSortedTasks(state.taskList)));
+  }
+
+  List<TaskEntity> _getSortedTasks(List<TaskEntity> tasks) {
+    final sortedList = List.of(tasks);
+
+    int Function(TaskEntity a, TaskEntity b) comparator;
+
+    switch (state.sortAction) {
+      case SortAction.myOrder:
+        comparator = (a, b) => a.createdAt.compareTo(b.createdAt);
+
+      case SortAction.date:
+        comparator = (a, b) {
+          final aDate = a.dateTime;
+          final bDate = b.dateTime;
+
+          if (aDate == null && bDate == null) return 0;
+          if (aDate == null) return 1;
+          if (bDate == null) return -1;
+
+          return aDate.compareTo(bDate);
+        };
+
+      case SortAction.deadline:
+        comparator = (a, b) {
+          final aDeadline = a.deadline;
+          final bDeadline = b.deadline;
+
+          if (aDeadline == null && bDeadline == null) return 0;
+          if (aDeadline == null) return 1;
+          if (bDeadline == null) return -1;
+
+          return aDeadline.compareTo(bDeadline);
+        };
+
+      case SortAction.starredRecently:
+        comparator = (a, b) =>
+            (b.isFavorite ? 1 : 0).compareTo(a.isFavorite ? 1 : 0);
+
+      case SortAction.title:
+        comparator = (a, b) => a.title.compareTo(b.title);
+    }
+
+    sortedList.sort(comparator);
+
+    return sortedList;
+  }
 
   @override
   Future<void> close() {

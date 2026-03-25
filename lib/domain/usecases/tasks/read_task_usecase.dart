@@ -15,7 +15,7 @@ class ReadTaskUsecase {
 
       // mapping subtasks to their parent tasks
       for (final task in tasks) {
-        if (task.parentTaskId != null) {
+        if (task.parentTaskId != null && task.isSubtask) {
           subtasksByParent.putIfAbsent(task.parentTaskId!, () => []).add(task);
         }
       }
